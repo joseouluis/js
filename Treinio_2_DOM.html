@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercicio 07 DOM</title>
+</head>
+<body>
+<h1>Treino 02</h1>
+
+<button onclick="ordemAlfabetica()">Ordem Alfabética</button>
+<br>
+<label for="a" >A: </label>
+<input id="a"/><br>
+
+<label for="b" >B: </label>
+<input id="b"/><br>
+
+<label for="c" >C: </label>
+<input id="c"/><br>
+
+<label for="d" >D: </label>
+<input id="d"/><br>
+
+<label for="e" >E: </label>
+<input id="e"/><br>
+
+<div id="lista"></div>
+
+
+<script>
+    var l2 = 0;
+    var ind  = 0;
+    function ordemAlfabetica()
+    {
+        var dados = [];
+
+        dados[0] = document.getElementById("a").value;
+        dados[1] = document.getElementById("b").value;
+        dados[2] = document.getElementById("c").value;
+        dados[3] = document.getElementById("d").value;
+        dados[4] = document.getElementById("e").value;
+
+        dados.sort();
+
+        var lis = document.getElementById("lista");
+        var novoItem = document.createElement("div");
+        novoItem.setAttribute("id","a"+(++ind));
+        novoItem.textContent = dados.toString();
+        lis.appendChild(novoItem);
+
+        l2 = document.getElementById("a"+ind);
+        var Item1 = document.createElement("input");
+        Item1.setAttribute("type","button");
+        Item1.setAttribute("value","Remover");
+        Item1.setAttribute("onclick","remove("+"'a"+ind+"')");
+        l2.appendChild(Item1);
+    }
+
+    function remove(id)
+    {
+        var lis = document.getElementById(id);
+        lis.removeChild(lis.firstChild);
+        lis.removeChild(lis.firstChild);
+    }
+</script>
+
+</body>
+</html>

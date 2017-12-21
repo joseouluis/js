@@ -1,0 +1,28 @@
+
+.format{
+	font-weight: bold;
+}
+
+.azul{
+  color:blue;
+}
+
+.vermelho{
+  color:red;
+}
+
+.verde{
+  color:green;
+}
+
+.backAzul{
+  background:blue;
+}
+
+.backVermelho{
+ background:red; 
+}
+
+.backVerde{
+  background:green;
+}

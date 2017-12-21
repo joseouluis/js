@@ -1,0 +1,6 @@
+// html basico
+https://github.com/schoolofnetcom/html-basico-rev2
+
+// javascript basico
+https://github.com/schoolofnetcom/javascript-basico
+

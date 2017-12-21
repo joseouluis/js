@@ -1,0 +1,13 @@
+
+p .faculdade{
+	
+}
+
+a[href*="bandtec"]{
+	color: red;
+}
+
+.digCor{
+	color: #00BACF;
+	background-color: #FF005C;;
+}

@@ -1,0 +1,148 @@
+<script>
+// variavel global
+var x;
+
+// variavel local
+let x;
+
+// concat()
+array1 = array1.concat(array2);
+// imprime na pagina
+document.write("<p>concat(): "+ array1.lenght + "</p>");
+// imprime na console
+console.log(array1);
+
+// join()
+// separa cada posicao do vetor por um " - "
+var list = array1.join(" - ");
+document.write("<p>join(): "+ list + "</p>");
+
+// push()
+// adiciona ao final do array
+array1.push("novo elemento");
+
+// pop()
+// remove o ultimo elemento do array
+array1.pop();
+
+// shift()
+// remove o primeiro elemento do array
+array1.shift();
+
+// unshift()
+// adiciona na primeira posicao do array
+array1.unshift("novo elemento");
+
+// slice()
+// copia uma seção do array
+// no caso abaixo copia da posição 1 até 2
+var sliceArray = array1.slice(1,3);
+
+//sprice()
+// substitui valores das posicões, podendo adicionar mais posições a meio
+// no caso abaixo, da posição 1 até a 3 seŕá substituido pelos valores A, B, C
+array1.sprice(1,3,"A","B","C");
+
+// reverse()
+// inverte a ordem dos numero
+array1.reverse();
+
+// sort()
+// ordenar os valores do array
+array1.sort();
+
+// sort() decrescente
+// ordena em ordem decrescente
+function desc (a,b){
+    if (a > b){
+        return -1;
+    }
+    if (a < b){
+        return 1;
+    }
+    if(a === b){
+        return 0;
+    }
+}
+// chama função desc
+array1.sort(desc);
+
+// indexOf()
+var array1 = ["green", "blue", "red"];
+// percorre o vetor buscando o indice da string "blue", caso não achar retorno -1
+var indiceArray = array1.indexOf("blue");
+document.write("<p>Retorno: "+indiceArray+" valor= "+array1[indiceArray]+"</p>");
+
+// buscando a partir de um indice
+// neste caso vai começar a buscar da posição 2 "red"
+var indiceArray = array1.indexOf("blue", 2)
+
+// lastIndexOf()
+// pesquisa de traz para frente no array
+// por indice tambem funciona
+var indiceArray = array1.lastIndexOf("blue");
+</script>
+
+// busca dinamica
+<input type="text" id="search"> 
+<button onclick="search();">search</button>
+<br/>
+<strong>Result: </strong>
+<br/>
+<span id="result" ></span>
+
+<script>
+    function search(){ 
+        var array = ["a content of a blog","news of an article","recipe for a cake","programming tips"];
+        var search = document.getElementById("search").value;
+        var testKey = null;
+        var result = "";
+        // for range / foreach
+        for(var key in arr){
+            // salva cada palavra em uma posicao do auxArray sempre que achar espaço
+            var auxArray = array[key].split(" ");
+            // agora percorre o novo array criado na linh acima
+            for(var key2 in auxArray){  
+                if(auxArray.indexOf(search) > -1){
+                    // para nao repetir palavras
+                    if(testKey != key){
+                        testKey = key;
+                        result += "<p>" + array[key] + "</p>";
+                    }
+                }
+            }
+        }
+        // adiciona o resultado no 'span' do HTML
+        document.getElementById("result").innerHTML = result;
+    }
+</script>
+
+<script>
+    // forEach
+    var arr = ["a content of a blog","news of an article","recipe for a cake","programming tips"];
+    arr.forEach(function(value,key){
+        document.write("<p>Key = " + key + " Value = " + value + "</p>");
+    });
+</script>
+
+<script type="text/javascript">	
+// fatorial recursivo
+    // declaro função
+    function somaFatorial(num){
+        // se for 1 ou 0 retorna 1
+        if (num === 0 || num === 1)
+            return 1;
+        else
+            return num * somaFatorial(num-1);
+    }
+    //MAIN
+    var num;
+    // só aceita se for um numero
+    do{
+        num = parseInt(prompt('Digite 1 numero: '));
+    } while(isNaN(num));
+        
+    // exibe já chamando a função
+    alert(somaFatorial(num));
+    
+    </script>

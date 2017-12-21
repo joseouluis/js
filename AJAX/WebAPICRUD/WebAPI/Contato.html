@@ -1,0 +1,348 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+				<div class="alert alert-danger">
+					<p>O que falta aqui para deixar "profissional":</p>
+					<ul>
+						<li>Criar os "gira-giras"</li>
+						<li>Travar os botões fechar do modal enquanto o "gira-gira" estiver ativo</li>
+						<li>Trocar os alert() por modal, ou mensagens na tela (como essa aqui)</li>
+						<li>Formatar melhor a página e a tabela ;)</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+				<div class="form-group">
+					<button id="btnCriar" type="button" class="btn btn-primary">Criar</button>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+				<table class="table table-striped table-hover table-bordered table-responsive">
+					<thead>
+						<tr>
+							<th>Nome</th>
+							<th>Endereço</th>
+							<th>Nascimento</th>
+							<th>Telefone</th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody id="corpoTabela"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="modalExcluir" tabindex="-1" role="dialog" aria-labelledby="modalExcluirTitulo">
+		<div class="modal-dialog modal-sm" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="modalExcluirTitulo">Oops...</h4>
+				</div>
+				<div class="modal-body">
+					Deseja mesmo excluir esse contato?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" id="btnExcluir">Excluir</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="modalContato" tabindex="-1" role="dialog" aria-labelledby="modalContatoTitulo">
+		<div class="modal-dialog modal-sm" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="modalContatoTitulo">Contato</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="Nome">Nome</label>
+						<input type="text" name="Nome" id="Nome" class="form-control" />
+					</div>
+					<div class="form-group">
+						<label for="Endereco">Endereço</label>
+						<input type="text" name="Endereco" id="Endereco" class="form-control" />
+					</div>
+					<div class="form-group">
+						<label for="Nascimento">Nascimento</label>
+						<input type="text" name="Nascimento" id="Nascimento" class="form-control" />
+					</div>
+					<div class="form-group">
+						<label for="Telefone">Telefone</label>
+						<input type="text" name="Telefone" id="Telefone" class="form-control" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" id="btnSalvar">Salvar</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		var btnCriar, corpoTabela, btnExcluir, btnSalvar, idAtual, Nome, Endereco, Nascimento, Telefone;
+		btnCriar = document.getElementById("btnCriar");
+		corpoTabela = document.getElementById("corpoTabela");
+		btnExcluir = document.getElementById("btnExcluir");
+		btnSalvar = document.getElementById("btnSalvar");
+		Nome = document.getElementById("Nome");
+		Endereco = document.getElementById("Endereco");
+		Nascimento = document.getElementById("Nascimento");
+		Telefone = document.getElementById("Telefone");
+
+		function tratarExcecao(xhr) {
+			var excecao = JSON.parse(xhr.responseText);
+			alert("Erro ocorrido: " + excecao.ExceptionMessage);
+		}
+
+		function listar() {
+			// Não vamos validar o $.active aqui, porque como a função listar()
+			// será chamada de dentro de alguns success(), ainda contará como
+			// tendo algo ativo, e acabará nunca mais listando de novo...
+			//if ($.active) {
+			//	return;
+			//}
+
+			while (corpoTabela.firstChild) {
+				corpoTabela.removeChild(corpoTabela.firstChild);
+			}
+
+			$.ajax({
+				url: "/api/Contato/Listar",
+				method: "GET",
+				cache: false,
+				dataType: "json",
+				success: function (data) {
+					if (!data || !data.length) {
+						alert("Nenhum contato foi encontrado!");
+					} else {
+
+						var linha, celula, cont, botaoEditar, botaoExcluir;
+
+						for (cont = 0; cont < data.length; cont++) {
+							linha = document.createElement("tr");
+
+							celula = document.createElement("td");
+							celula.textContent = data[cont].Nome;
+							linha.appendChild(celula);
+
+							celula = document.createElement("td");
+							celula.textContent = data[cont].Endereco;
+							linha.appendChild(celula);
+
+							celula = document.createElement("td");
+							celula.textContent = data[cont].NascimentoStr;
+							linha.appendChild(celula);
+
+							celula = document.createElement("td");
+							celula.textContent = data[cont].Telefone;
+							linha.appendChild(celula);
+
+							botaoEditar = document.createElement("button");
+							botaoEditar.className = "btn btn-success";
+							botaoEditar.setAttribute("type", "button");
+							botaoEditar.setAttribute("data-id", data[cont].Id);
+							botaoEditar.textContent = "Editar";
+							botaoEditar.onclick = botaoEditarClick;
+							celula = document.createElement("td");
+							celula.appendChild(botaoEditar);
+							linha.appendChild(celula);
+
+							botaoExcluir = document.createElement("button");
+							botaoExcluir.className = "btn btn-danger";
+							botaoExcluir.setAttribute("type", "button");
+							botaoExcluir.setAttribute("data-id", data[cont].Id);
+							botaoExcluir.textContent = "Excluir";
+							botaoExcluir.onclick = botaoExcluirClick;
+							celula = document.createElement("td");
+							celula.appendChild(botaoExcluir);
+							linha.appendChild(celula);
+
+							corpoTabela.appendChild(linha);
+						}
+					}
+				},
+				error: function (xhr) {
+					tratarExcecao(xhr);
+				}
+			});
+		}
+
+		function botaoEditarClick() {
+			idAtual = this.getAttribute("data-id");
+
+			if ($.active) {
+				// Ainda existe outra requisição em andamento...
+				// Nós poderíamos iniciar outra requisição simultânea,
+				// mas por integridade, iremos apenas ignorar o clique
+				return;
+			}
+
+			// Os atributos desse objeto serão enviados para o servidor, que os atribuirá
+			// aos parâmetros do método Obter() com o MESMO nome
+			var parametros = {
+				id: idAtual
+			};
+
+			$.ajax({
+				url: "/api/Contato/Obter",
+				method: "GET",
+				cache: false,
+				dataType: "json",
+				data: parametros,
+				success: function (data) {
+					if (!data) {
+						alert("Contato não encontrado!");
+					} else {
+						Nome.value = data.Nome;
+						Endereco.value = data.Endereco;
+						Nascimento.value = data.NascimentoStr;
+						Telefone.value = data.Telefone;
+
+						$("#modalContato").modal();
+					}
+				},
+				error: function (xhr) {
+					tratarExcecao(xhr);
+				}
+			});
+		}
+
+		btnExcluir.onclick = function () {
+			if ($.active) {
+				// Ainda existe outra requisição em andamento...
+				// Nós poderíamos iniciar outra requisição simultânea,
+				// mas por integridade, iremos apenas ignorar o clique
+				return;
+			}
+
+			// Os atributos desse objeto serão enviados para o servidor, que os atribuirá
+			// aos parâmetros do método Pesquisar() com o MESMO nome
+			var parametros = {
+				id: idAtual
+			};
+
+			$.ajax({
+				url: "/api/Contato/Excluir",
+				method: "GET",
+				cache: false,
+				dataType: "json",
+				data: parametros,
+				success: function (data) {
+					$("#modalExcluir").modal("hide");
+					if (!data) {
+						alert("Esse contato não foi encontrado!");
+					} else {
+						// Perceba que aqui, data é na verdade um array!!!
+						alert("Contato excluído com sucesso!");
+
+						listar();
+					}
+				},
+				error: function (xhr) {
+					$("#modalExcluir").modal("hide");
+					tratarExcecao(xhr);
+				}
+			});
+		}
+
+		function botaoExcluirClick() {
+			idAtual = this.getAttribute("data-id");
+
+			$("#modalExcluir").modal();
+		}
+
+		btnCriar.onclick = function () {
+			idAtual = 0;
+
+			Nome.value = "";
+			Endereco.value = "";
+			Nascimento.value = "";
+			Telefone.value = "";
+
+			$("#modalContato").modal();
+		}
+
+		btnSalvar.onclick = function () {
+			// Validar campos!!!!!
+
+
+			if ($.active) {
+				// Ainda existe outra requisição em andamento...
+				// Nós poderíamos iniciar outra requisição simultânea,
+				// mas por integridade, iremos apenas ignorar o clique
+				return;
+			}
+
+			// Nesse exemplo, vamos enviar o objeto abaixo para o servidor (veja o código do método Criar()
+			// para mais informações)
+			var contato = {
+				Id: idAtual,
+				Nome: Nome.value,
+				Endereco: Endereco.value,
+				Nascimento: Nascimento.value,
+				Telefone: Telefone.value
+			};
+
+			$.ajax({
+				// Endereço que estamos requisitando (WebAPI, MVC, ou outro recurso qualquer que exista no servidor)
+				url: (idAtual === 0 ? "/api/Contato/Criar" : "/api/Contato/Salvar"),
+				// Os métodos mais comuns são GET e POST, sendo que o POST é utilizado para enviar grandes quantidades
+				// de dados para o servidor (no corpo da requisição), ao passo que GET é utilizado para obter dados
+				// do servidor (os dados, caso existam, são enviados através da própria url -> query string)
+				method: "POST",
+				// Definimos cache como false para tentar evitar casos onde o browser possa vir a armazenar os
+				// resultados da requisição em cache, pois nossos dados são dinâmicos, e podem mudar toda vez
+				cache: false,
+				// O tipo de dados que esperamos do servidor, que no nosso caso, sempre será dados em formato JSON
+				dataType: "json",
+				// Os dados que desejamos enviar para o servidor (se o método for GET, os dados irão na query string,
+				// ao passo que se o método for POST, os dados serão enviados no corpo da requisição)
+				data: contato,
+				// Função para tratar o término da requisição, em caso de sucesso (data contém osdados retornados
+				// pelo servidor, quaisquer que sejam, e lembrando que o formato deve coincidir com o formato passado
+				// em dataType)
+				success: function (data) {
+					$("#modalContato").modal("hide");
+					if (idAtual === 0) {
+						alert("Contato criado com sucesso!");
+					} else {
+						alert("Contato salvo com sucesso!");
+					}
+					listar();
+				},
+				// Função para tratar o término da requisição, em caso de erro (xhr é o objeto XHR original,
+				// de onde podemos tirar mais informações sobre o erro...)
+				error: function (xhr) {
+					$("#modalContato").modal("hide");
+					tratarExcecao(xhr);
+				}
+			});
+		}
+
+		listar();
+	</script>
+</body>
+</html>
