@@ -1,3 +1,7 @@
+.paciente-invalido{
+    background-color: lightcoral;
+}
+
 *{
 	box-sizing: border-box;
  }
