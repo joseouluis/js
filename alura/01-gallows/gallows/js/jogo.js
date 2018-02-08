@@ -7,6 +7,8 @@ var criaJogo = function () {
     var criaLacunas = function () {
         for ( let i = 0; i < palavraSecreta.length; i++ ) {
             lacunas.push( '' );
+            // OU
+            //Array(palavraSecreta.length).fill('')
         }
     };
 
