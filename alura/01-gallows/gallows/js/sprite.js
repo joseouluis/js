@@ -1,36 +1,45 @@
-var sprite = createSprite('.sprite');
+var createSprite = function(selector) {
 
-setInterval(function () {
-    sprite.nextFrame();
-}, 500);
+    var hasNext = function() {
+        return current + 1 <= last;
+    };
 
-function createSprite(selector) {
+    var moveFrame = function ( from, to ) {
+        $el.removeClass( from )
+            .addClass( to );
+    };
 
-    var $el = $(selector);
+    var nextFrame = function() {
+        if ( hasNext() ) moveFrame( frames[current], frames[++current] );
+    };
 
+    var reset = function(){
+        moveFrame( frames[current], frames[0]);
+        current = 0;
+    }
+
+    var isFinished = function(){
+        return current == last;
+    }
+
+    var $el = $( selector );
     var frames = [
         'frame1', 'frame2', 'frame3', 'frame4', 'frame5',
         'frame6', 'frame7', 'frame8', 'frame9'
     ];
 
     var current = 0;
-
-    var last = frames.length -1; 
-
-    $el.addClass(frames[current]);  
-
-    function moveFrame (from, to) {
-
-        $el.removeClass(from)
-            .addClass(to);
-    }
-
-    function nextFrame() {
-
-        moveFrame(frames[current], frames[++current]);
-    }
-
-    return {
-        nextFrame: nextFrame
+    var last = frames.length - 1;
+    $el.addClass( frames[current] );
+    return { 
+        nextFrame: nextFrame,  
+        reset: reset,
+        isFinished: isFinished
     };
-}
+};
+
+// var sprite = createSprite('.sprite');
+
+// setInterval(function () {
+//     sprite.nextFrame();
+// }, 500);
