@@ -1,5 +1,14 @@
 var createSprite = function( selector ) {
 
+    var frames = [
+        'frame1', 'frame2', 'frame3', 'frame4', 'frame5',
+        'frame6', 'frame7', 'frame8', 'frame9'
+    ];
+    var $el = $( selector );
+    var current = 0;
+    var last = frames.length - 1;
+    $el.addClass( frames[current] );
+
     var hasNext = function() {
         return current + 1 <= last;
     };
@@ -21,16 +30,6 @@ var createSprite = function( selector ) {
     var isFinished = function(){
         return current == last;
     }
-
-    var frames = [
-        'frame1', 'frame2', 'frame3', 'frame4', 'frame5',
-        'frame6', 'frame7', 'frame8', 'frame9'
-    ];
-    
-    var $el = $( selector );
-    var current = 0;
-    var last = frames.length - 1;
-    $el.addClass( frames[current] );
 
     return { 
         nextFrame: nextFrame,  
