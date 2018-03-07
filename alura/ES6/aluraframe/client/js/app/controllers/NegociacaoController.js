@@ -17,10 +17,7 @@ class NegociacaoController {
             this._inputData.value
             .split('-')
             .map(function(item, indice) {
-                if(indice == 1) {
-                    return item - 1;
-                }
-                return item;
+                return item - indice % 2;
             })
         );
         console.log(data);
