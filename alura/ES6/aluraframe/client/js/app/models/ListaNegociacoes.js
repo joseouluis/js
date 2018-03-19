@@ -21,4 +21,9 @@ class ListaNegociacoes {
         this._negociacoes = [];
         Reflect.apply(this._armadilha, this._contexto, [this]);
     }
+
+    esvazia()   {
+
+        this._negociacoes = [];
+    }
 }
