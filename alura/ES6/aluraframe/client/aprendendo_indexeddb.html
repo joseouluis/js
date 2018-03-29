@@ -11,7 +11,6 @@
         let openRequest = window.indexedDB.open('aluraframe', 2);
 
         openRequest.onupgradeneeded = e => {
-
             console.log('Criando ou atualizando o banco');
 
             let minhaConnection = e.target.result;
@@ -19,13 +18,11 @@
         };
 
         openRequest.onsuccess = e => {
-
             console.log('Conexão obtida com sucesso');
             connection = e.target.result;
         };
 
         openRequest.onerror = e => {
-
             console.log(e.target.error);
         };
 
