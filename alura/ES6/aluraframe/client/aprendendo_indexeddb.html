@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <script>
+
+        let openRequest = window.indexedDB.open('aluraframe', 2);
+
+        openRequest.onupgradeneeded = e => {
+
+            console.log('Criando ou atualizando o banco');
+
+            let minhaConnection = e.target.result;
+            minhaConnection.createObjectStore('negociacoes');
+        };
+
+        openRequest.onsuccess = e => {
+
+            console.log('Conexão obtida com sucesso');
+            connection = e.target.result;
+        };
+
+        openRequest.onerror = e => {
+
+            console.log(e.target.error);
+        };
+
+    </script>
+</body>
