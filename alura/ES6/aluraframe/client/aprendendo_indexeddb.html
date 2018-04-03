@@ -4,14 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <script src="js/app/models/Negociacao.js"></script>
-    <script src="js/app/services/ConnectionFactory.js"></script>
 </head>
 
 <body>
     <script>
 
         var connection;
-        var openRequest = window.indexedDB.open('aluraframe', 8);
+        var openRequest = window.indexedDB.open('aluraframe', 9);
 
         openRequest.onupgradeneeded = e => {
             console.log('Cria ou altera um banco já existente');
