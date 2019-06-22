@@ -60,9 +60,10 @@ async function main() {
 
 main();
 
-// obterUsuario()
-//     .then(user => obterTelefone(user.id))
-//     .then(tel => console.log('resultado', tel))
-//     .catch(function(erro) {
-//         console.log('erro', erro);
-//     })
+const foo = {
+    bar: 'aaa',
+    baz: 34
+}
+
+const { nome, baz } = foo;
+console.log(nome,baz);
